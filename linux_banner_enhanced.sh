@@ -13,6 +13,7 @@ USE_PROGRESS=1
 GRADIENT_STYLE="rainbow"  
 
 # Owner Info (Default fallback)
+# NOTE: Inko yahan se change karne ke liye option 3 mein 'nano' kholna padega, ya yahi se seedha edit karna hoga.
 OWNER_NAME="u0_a326"
 GITHUB_LINK="https://github.com/mr30iii"
 WHATSAPP_CHANNEL="https://www.whatsapp.com/channel/0029VbBTcfJCHDys1Q2ltf0n"
@@ -90,7 +91,7 @@ progress_bar() {
   sleep 0.08
 }
 
-# --- ORIGINAL FALLBACK BANNER ---
+# --- ORIGINAL FALLBACK BANNER (RESTORED) ---
 read -r -d '' FALLBACK <<'EOF'
 
 ⠀⠀⠀⠈⠉⠉⠉⠉⠉⠉⠉⠉⠙⠛⠛⠛⠛⠛⠻⠿⠷⠶⢶⣶⣶⣤⣤⣤⣄⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -140,7 +141,7 @@ build_banner_text() {
   fi
 }
 
-# --- USERNAME MANAGEMENT (Same as before) ---
+# --- USERNAME MANAGEMENT ---
 get_username() {
     if [ -f "$CONFIG_FILE" ] && [ -s "$CONFIG_FILE" ]; then
         read -r SAVED_NAME < "$CONFIG_FILE"
@@ -188,47 +189,37 @@ edit_shell_config() {
     fi
 }
 
-# --- NEW FUNCTION FOR OPTION 3 (No Nano Shortcuts) ---
+# --- NEW/UPDATED FUNCTION FOR OPTION 3 (Editor-Free) ---
 setup_config_menu() {
-    local NEW_NAME NEW_GITHUB NEW_WHATSAPP
+    local NEW_NAME
     
-    printf "\n%b" "${BOLD}${UNDER}3. Customize Banner Details (Simple Setup)${RESET}\n"
-    printf "%b\n" "${DIM}Yah Fancy Prompt aur Banner ka look set karega.${RESET}\n"
+    printf "\n%b" "${BOLD}${UNDER}3. Customize Banner/Prompt Name${RESET}\n"
+    printf "%b\n" "${DIM}Sirf aapka naam badal jayega, koi editor nahi khulega.${RESET}\n"
 
     # --- OWNER NAME ---
     printf "%b" "$(fg 220)Current Name: ${BOLD}$OWNER_NAME${RESET}\n"
     printf "%b" "$(fg 220)Enter New Name (leave blank to keep current): ${RESET}"
     read -r NEW_NAME
+    
     if [ -n "$NEW_NAME" ]; then
         # Naam ko CONFIG_FILE mein update karna hai
         echo "$NEW_NAME" > "$CONFIG_FILE"
+        # OWNER_NAME ko runtime mein bhi update karna hai
         OWNER_NAME="$NEW_NAME"
-        printf "%b\n" "$(fg 82)✅ Name updated to '$OWNER_NAME'${RESET}"
+        printf "\n%b\n" "$(fg 82)✅ Name updated to '$OWNER_NAME'${RESET}"
     else
-        printf "%b\n" "$(fg 240)Name not changed.${RESET}"
+        printf "\n%b\n" "$(fg 240)Name not changed.${RESET}"
     fi
 
-    # --- LINKS (Yeh part abhi bhi nano se karna behtar hai) ---
-    printf "\n%b" "$(fg 202)⚙️ Note: GitHub/WhatsApp links badalne ke liye apko ${BOLD}Nano editor${RESET} ki zaroorat padegi.${RESET}\n"
-    printf "%b\n" "Aap chahte hain to abhi poori script file kholkar links change kar sakte hain."
+    # --- Links/Colors Info ---
+    printf "\n%b\n" "$(fg 202)💡 GitHub/WhatsApp links aur Colors badalne ke liye, apko ${BOLD}script file ko seedha edit${RESET} karna hoga: ${BOLD}pkg install nano && nano \$0${RESET}"
     
-    printf "%b" "${BOLD}Open Nano to edit Links/Colors? (y/n): ${RESET}"
-    read -r OPEN_NANO
-
-    if [[ "$OPEN_NANO" =~ ^[Yy]$ ]]; then
-        if command -v nano >/dev/null 2>&1; then
-            nano "$0"
-        else
-            printf "%b\n" "$(fg 196)⚠️ Nano not found. Links/Colors change nahi ho paye.${RESET}"
-        fi
-    fi
-
     printf "\n%b\n" "$(fg 82)Setup Complete! Changes apply karne ke liye menu se exit karein.${RESET}"
     read -r -p "Press ENTER to return to the menu..."
 }
 
 
-# --- MAIN MENU FUNCTION (Option 3 Updated) ---
+# --- MAIN MENU FUNCTION ---
 main_menu() {
     local CHOICE
     while true; do
@@ -238,7 +229,7 @@ main_menu() {
         printf "%b\n" "${BOLD}=========================================${RESET}"
         printf "%b\n" " ${BOLD}1)${RESET} $(fg 82)Install All Packages${RESET} (Essential tools)"
         printf "%b\n" " ${BOLD}2)${RESET} $(fg 118)Edit Shell Config (.bashrc)${RESET} (Permanent startup ke liye)"
-        printf "%b\n" " ${BOLD}3)${RESET} $(fg 220)Customize Banner/Name${RESET} (Simple Name/Link Setup) <--- Yahan Sudhara Hai"
+        printf "%b\n" " ${BOLD}3)${RESET} $(fg 220)Customize Banner/Name${RESET} (Sirf Naam Badlein - No Nano) <--- Ab Yah Editor Nahi Kholega"
         printf "%b\n" " ${BOLD}E)${RESET} $(fg 196)Exit Menu and Start Fancy Shell${RESET}"
         printf "%b\n" "${BOLD}=========================================${RESET}"
         printf "%b" "${BOLD}Enter choice (1-3 or E): ${RESET}"
@@ -247,7 +238,7 @@ main_menu() {
         case "$CHOICE" in
             1) install_packages ;;
             2) edit_shell_config ;;
-            3) setup_config_menu ;; # Naya function yahan call ho raha hai
+            3) setup_config_menu ;; # Naya, editor-free function
             [eE]) 
                 clear
                 printf "%b\n" "${DIM}Starting your personalized shell...${RESET}"
@@ -266,7 +257,6 @@ interactive_prompt() {
   local idx=0
   local typing_speed=0.005 
 
-  # Time-Based Colors ke liye
   local colors_morning=(220 184 214) 
   local colors_afternoon=(46 51 81)  
   local colors_night=(27 21 160)     
