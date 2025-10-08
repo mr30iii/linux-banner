@@ -47,9 +47,21 @@ Animated banners, matrix intro, pulse borders, fancy prompt, owner info, GitHub 
 ## 🚀 Installation & Run
 
 1️⃣ Clone the repository:
-
-```bash
+```
 git clone https://github.com/mr30iii/linux-banner.git
+```
+---
+
+```
 cd linux-banner
+```
+---
+
+```
 chmod +x linux_banner_enhanced.sh
+```
+---
+
+```
 ./linux_banner_enhanced.sh
+```
