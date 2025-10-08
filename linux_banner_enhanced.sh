@@ -2,16 +2,15 @@
 # Enhanced_Termux_Setup_RAJA.sh - Complete Banner, Menu, and Dynamic Prompt Script
 
 # --- CONFIGURATION FILE ---
-# User ka naam is file mein save hoga Termux home directory mein
 CONFIG_FILE="$HOME/.fancy_prompt_name"
 
 ### USER CONFIG
-SLEEP_CHAR=0.002       # Banner typing speed
-SLEEP_LINE=0.01        # Delay after each banner line
+SLEEP_CHAR=0.002       
+SLEEP_LINE=0.01        
 BANNER_DELAY=0.5
-CENTER_TEXT=1          # 1 = center banner horizontally
-USE_PROGRESS=1         # Small loading bar before banner
-GRADIENT_STYLE="rainbow"  # options: rainbow, teal, sunset, green
+CENTER_TEXT=1          
+USE_PROGRESS=1         
+GRADIENT_STYLE="rainbow"  
 
 # Owner Info (Default fallback)
 OWNER_NAME="u0_a326"
@@ -91,7 +90,7 @@ progress_bar() {
   sleep 0.08
 }
 
-# --- ORIGINAL FALLBACK BANNER (Wapas Add Kiya Gaya) ---
+# --- ORIGINAL FALLBACK BANNER ---
 read -r -d '' FALLBACK <<'EOF'
 
 ⠀⠀⠀⠈⠉⠉⠉⠉⠉⠉⠉⠉⠙⠛⠛⠛⠛⠛⠻⠿⠷⠶⢶⣶⣶⣤⣤⣤⣄⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -137,11 +136,11 @@ build_banner_text() {
   elif command -v figlet >/dev/null 2>&1; then
     figlet -f slant "$text" 2>/dev/null || figlet "$text" 2>/dev/null
   else
-    echo "$FALLBACK" # Ab Fallback Banner use hoga
+    echo "$FALLBACK"
   fi
 }
 
-# --- USERNAME MANAGEMENT ---
+# --- USERNAME MANAGEMENT (Same as before) ---
 get_username() {
     if [ -f "$CONFIG_FILE" ] && [ -s "$CONFIG_FILE" ]; then
         read -r SAVED_NAME < "$CONFIG_FILE"
@@ -162,7 +161,7 @@ get_username() {
     fi
 }
 
-# --- MENU FUNCTIONS (Options ke liye) ---
+# --- MENU FUNCTIONS ---
 
 install_packages() {
     local PKGS=(git curl wget python nodejs figlet toilet nano)
@@ -189,17 +188,47 @@ edit_shell_config() {
     fi
 }
 
-edit_banner_script() {
-    printf "\n%b" "${BOLD}${UNDER}3. Customizing Banner Script...${RESET}\n"
-    if command -v nano >/dev/null 2>&1; then
-        nano "$0" 
+# --- NEW FUNCTION FOR OPTION 3 (No Nano Shortcuts) ---
+setup_config_menu() {
+    local NEW_NAME NEW_GITHUB NEW_WHATSAPP
+    
+    printf "\n%b" "${BOLD}${UNDER}3. Customize Banner Details (Simple Setup)${RESET}\n"
+    printf "%b\n" "${DIM}Yah Fancy Prompt aur Banner ka look set karega.${RESET}\n"
+
+    # --- OWNER NAME ---
+    printf "%b" "$(fg 220)Current Name: ${BOLD}$OWNER_NAME${RESET}\n"
+    printf "%b" "$(fg 220)Enter New Name (leave blank to keep current): ${RESET}"
+    read -r NEW_NAME
+    if [ -n "$NEW_NAME" ]; then
+        # Naam ko CONFIG_FILE mein update karna hai
+        echo "$NEW_NAME" > "$CONFIG_FILE"
+        OWNER_NAME="$NEW_NAME"
+        printf "%b\n" "$(fg 82)✅ Name updated to '$OWNER_NAME'${RESET}"
     else
-        printf "%b\n" "$(fg 196)⚠️ Nano not found. Please install it first using option 1 or 'pkg install nano'.${RESET}"
-        read -r -p "Press ENTER to return to the menu..."
+        printf "%b\n" "$(fg 240)Name not changed.${RESET}"
     fi
+
+    # --- LINKS (Yeh part abhi bhi nano se karna behtar hai) ---
+    printf "\n%b" "$(fg 202)⚙️ Note: GitHub/WhatsApp links badalne ke liye apko ${BOLD}Nano editor${RESET} ki zaroorat padegi.${RESET}\n"
+    printf "%b\n" "Aap chahte hain to abhi poori script file kholkar links change kar sakte hain."
+    
+    printf "%b" "${BOLD}Open Nano to edit Links/Colors? (y/n): ${RESET}"
+    read -r OPEN_NANO
+
+    if [[ "$OPEN_NANO" =~ ^[Yy]$ ]]; then
+        if command -v nano >/dev/null 2>&1; then
+            nano "$0"
+        else
+            printf "%b\n" "$(fg 196)⚠️ Nano not found. Links/Colors change nahi ho paye.${RESET}"
+        fi
+    fi
+
+    printf "\n%b\n" "$(fg 82)Setup Complete! Changes apply karne ke liye menu se exit karein.${RESET}"
+    read -r -p "Press ENTER to return to the menu..."
 }
 
-# --- MAIN MENU FUNCTION ---
+
+# --- MAIN MENU FUNCTION (Option 3 Updated) ---
 main_menu() {
     local CHOICE
     while true; do
@@ -209,7 +238,7 @@ main_menu() {
         printf "%b\n" "${BOLD}=========================================${RESET}"
         printf "%b\n" " ${BOLD}1)${RESET} $(fg 82)Install All Packages${RESET} (Essential tools)"
         printf "%b\n" " ${BOLD}2)${RESET} $(fg 118)Edit Shell Config (.bashrc)${RESET} (Permanent startup ke liye)"
-        printf "%b\n" " ${BOLD}3)${RESET} $(fg 220)Customize Banner Script${RESET} (Variables edit karein)"
+        printf "%b\n" " ${BOLD}3)${RESET} $(fg 220)Customize Banner/Name${RESET} (Simple Name/Link Setup) <--- Yahan Sudhara Hai"
         printf "%b\n" " ${BOLD}E)${RESET} $(fg 196)Exit Menu and Start Fancy Shell${RESET}"
         printf "%b\n" "${BOLD}=========================================${RESET}"
         printf "%b" "${BOLD}Enter choice (1-3 or E): ${RESET}"
@@ -218,7 +247,7 @@ main_menu() {
         case "$CHOICE" in
             1) install_packages ;;
             2) edit_shell_config ;;
-            3) edit_banner_script ;;
+            3) setup_config_menu ;; # Naya function yahan call ho raha hai
             [eE]) 
                 clear
                 printf "%b\n" "${DIM}Starting your personalized shell...${RESET}"
@@ -233,7 +262,7 @@ main_menu() {
 interactive_prompt() {
   local username="$OWNER_NAME"
   local host="termux"
-  local arrow_colors=(196 202 208 46) # Arrows rainbow
+  local arrow_colors=(196 202 208 46) 
   local idx=0
   local typing_speed=0.005 
 
@@ -264,7 +293,7 @@ interactive_prompt() {
     printf "%b" "$(fg $user_col)$username"
     printf "%b" "$(fg $dim_arrow_col)@$RESET"
     printf "%b" "$(fg $host_col)$host"
-    printf "%b" "$(fg $arrow_col) ($cwd)]" # Directory display
+    printf "%b" "$(fg $arrow_col) ($cwd)]" 
     printf "%b" "\n"
     printf "%b" "$(fg $arrow_col)╰─▶ ${RESET}" 
 
@@ -284,7 +313,7 @@ interactive_prompt() {
       printf "%b" "$(fg $color)$ch${RESET}"
       sleep $typing_speed
     done
-    printf "%b" "$(fg 226)${BOLD}█${RESET}" # Final cursor
+    printf "%b" "$(fg 226)${BOLD}█${RESET}" 
     
     # Command execution simulated output
     printf "\n"
@@ -301,17 +330,14 @@ interactive_prompt() {
 # === MAIN SCRIPT EXECUTION ===
 # ==========================================================
 clear
-get_username # Step 1: Naam set ya load hoga
+get_username 
 
-# Sirf tabhi aage badho jab naam save ho chuka ho (i.e. first run ke baad)
 if [ -f "$CONFIG_FILE" ]; then
     progress_bar
-
     printf "%b" "${DIM}${BOLD}Initializing...${RESET}\n"
     sleep 0.12
 
     # --- BANNER DRAWING ---
-    # Figlet/Toilet available nahi hone par ab FALLBACK (Original Banner) use hoga.
     BANNER="$(build_banner_text LINUX)"
     IFS=$'\n' read -rd '' -a LINES <<<"$BANNER" || true
 
@@ -331,7 +357,6 @@ if [ -f "$CONFIG_FILE" ]; then
       padding_left=$(( (total_width - ${#line}) / 2 - 1 ))
       padding_right=$(( total_width - ${#line} - padding_left - 2 ))
       printf "%b" "$(printf '%*s' $left_pad '')"; printf "%b" "$(fg 240)║${RESET} "
-      # Agar FALLBACK ASCII art hai toh type_line_colored use mat karo, seedha print karo
       if [ "$BANNER" = "$FALLBACK" ]; then
           printf "%b\n" "$line"
       else
@@ -367,6 +392,4 @@ if [ -f "$CONFIG_FILE" ]; then
     interactive_prompt
 fi
 
-# The final 'clear' at the end of the full script will still run.
 clear
-# Script khatam
