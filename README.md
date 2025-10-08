@@ -10,7 +10,7 @@ Animated banners, matrix intro, pulse borders, fancy prompt, owner info, GitHub 
 
 ---
 
-<h1><i><b>##🌟 Features</b></i></h1>
+## <h1><i><b>🌟 Features</b></i></h1>
 
 ### ✨ Banner & Animation
 - 🌈 Gradient colored banner (rainbow, teal, sunset, green)  
