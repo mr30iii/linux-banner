@@ -1,51 +1,52 @@
 # 🐧 Linux Banner Enhanced for Termux
 
 ![Termux Banner](https://img.shields.io/badge/Termux-Linux%20Banner-brightgreen)
-![License](https://img.shields.io/badge/License-MIT-blue)
 ![Platform](https://img.shields.io/badge/Platform-Android%20(Termux)-yellowgreen)
+![License](https://img.shields.io/badge/License-MIT-blue)
+![Version](https://img.shields.io/badge/Version-1.0.0-orange)
 
-💻 **Give your Termux terminal a stylish, hacker-style look!**  
-Animated banner, matrix intro, pulse borders, fancy prompts, and owner info — all in one!
+💻 **Transform your Termux terminal into a hacker-style playground!**  
+Animated banners, matrix intro, pulse borders, fancy prompt, owner info, GitHub & WhatsApp integration — all in one place!  
 
 ---
 
 ## 🌟 Features
 
-✨ **Banner & Effects**
-- 🎨 Gradient colored banner (rainbow, teal, sunset, green)
-- 🔹 Optional shadow and centering
-- ⏳ Progress bar during startup
-- 🖤 Matrix-style intro
-- 💫 Pulse border animation
-- 🔊 Optional beep sounds
+### ✨ Banner & Animation
+- 🌈 Gradient colored banner (rainbow, teal, sunset, green)  
+- 🔹 Optional shadow and text centering  
+- ⏳ Animated progress bar at startup  
+- 🖤 Matrix-style intro effect  
+- 💫 Pulse border animation  
+- 🔊 Optional beep sounds  
 
-💻 **Fancy Terminal Prompt**
-- 🌈 Rainbow user & host
-- ✨ Animated typing effect
-- 🔹 Blinking cursor
-- ⚡ Simulated command output
+### 💻 Fancy Terminal Prompt
+- 🌈 Rainbow-colored user & host  
+- ✨ Animated typing simulation  
+- 🔹 Blinking cursor effect  
+- ⚡ Simulated command output  
 
-📌 **Footer & Info**
-- 🧑 Owner name
-- 🐱 GitHub link
-- 💬 WhatsApp channel
-- 📦 Automatic package check & install
-- 📲 Auto-launch WhatsApp channel (Android Termux)
+### 📌 Footer & Info
+- 🧑 Owner name  
+- 🐱 GitHub link  
+- 💬 WhatsApp channel  
+- 📦 Automatic package check & install (`git`, `curl`, `wget`, `python`, `nodejs`, `figlet`, `toilet`)  
+- 📲 Auto-launch WhatsApp channel (Android Termux)  
 
 ---
 
-## 🛠 Requirements
+## 💻 Requirements
 
 - Termux on Android  
 - Bash (`#!/data/data/com.termux/files/usr/bin/bash`)  
-- Optional: `figlet` or `toilet` for fancy ASCII banner fonts  
-- Script auto-installs missing packages: `git`, `curl`, `wget`, `python`, `nodejs`, `figlet`, `toilet`
+- Optional: `figlet` or `toilet` for ASCII banner fonts  
+- Script auto-installs missing packages  
 
 ---
 
 ## 🚀 Installation & Run
 
-1️⃣ Clone the repo:
+1️⃣ Clone the repository:
 
 ```bash
 git clone https://github.com/mr30iii/linux-banner.git
