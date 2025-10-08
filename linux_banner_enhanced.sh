@@ -157,10 +157,26 @@ flicker_print() {
   printf "%b\n" "$txt"
 }
 
-matrix_intro() { # ... }
-pulse_border() { # ... }
-boot_messages() { # ... }
-draw_shadow() { # ... }
+matrix_intro() {
+  # Optional matrix intro animation code
+  return
+}
+
+pulse_border() {
+  # Optional pulse border animation code
+  return
+}
+
+boot_messages() {
+  # Optional boot messages code
+  return
+}
+
+draw_shadow() {
+  # Optional shadow drawing code
+  return
+}
+
 
 # === FANCY TERMINAL PROMPT FUNCTION ===
 fancy_prompt() {
