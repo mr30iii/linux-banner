@@ -1,40 +1,34 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# linux_banner_enhanced.sh - Enhanced Termux banner with Owner/GitHub/WhatsApp
+# Enhanced_Termux_Setup_RAJA.sh - Complete Banner, Menu, and Dynamic Prompt Script
+
+# --- CONFIGURATION FILE ---
+# User ka naam is file mein save hoga Termux home directory mein
+CONFIG_FILE="$HOME/.fancy_prompt_name"
 
 ### USER CONFIG
-SLEEP_CHAR=0.002       # typing speed per character
-SLEEP_LINE=0.01        # extra delay after each line
+SLEEP_CHAR=0.002       # Banner typing speed
+SLEEP_LINE=0.01        # Delay after each banner line
 BANNER_DELAY=0.5
-USE_SHADOW=1           # 1 = show shadow
 CENTER_TEXT=1          # 1 = center banner horizontally
-USE_PROGRESS=1         # small loading bar before banner
+USE_PROGRESS=1         # Small loading bar before banner
 GRADIENT_STYLE="rainbow"  # options: rainbow, teal, sunset, green
 
-# New visual features
-MATRIX_INTRO=1
-BOOT_MESSAGES=1
-PULSE_BORDER=1
-SOUND_BEEP=0
-
-# Owner Info
-OWNER_NAME="RAJA"
+# Owner Info (Default fallback)
+OWNER_NAME="u0_a326"
 GITHUB_LINK="https://github.com/mr30iii"
 WHATSAPP_CHANNEL="https://www.whatsapp.com/channel/0029VbBTcfJCHDys1Q2ltf0n"
 
+# --- ANSI/Color Definitions ---
 ESC="\e"
 RESET="${ESC}[0m"
 BOLD="${ESC}[1m"
 DIM="${ESC}[2m"
 UNDER="${ESC}[4m"
-
-# 256-color helpers
 fg() { printf "%b" "${ESC}[38;5;$1m"; }
 bgc() { printf "%b" "${ESC}[48;5;$1m"; }
 
-get_cols() {
-  cols=$(tput cols 2>/dev/null || echo 80)
-  echo $cols
-}
+# --- UTILITY FUNCTIONS ---
+get_cols() { cols=$(tput cols 2>/dev/null || echo 80); echo $cols; }
 
 center_line() {
   local line="$1"
@@ -97,6 +91,7 @@ progress_bar() {
   sleep 0.08
 }
 
+# --- ORIGINAL FALLBACK BANNER (Wapas Add Kiya Gaya) ---
 read -r -d '' FALLBACK <<'EOF'
 
 ⠀⠀⠀⠈⠉⠉⠉⠉⠉⠉⠉⠉⠙⠛⠛⠛⠛⠛⠻⠿⠷⠶⢶⣶⣶⣤⣤⣤⣄⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -127,11 +122,11 @@ read -r -d '' FALLBACK <<'EOF'
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀██║      ██║ ██║╚██╗██║ ██║   ██║  ██╔██╗⠀⠀⠀⠀⠀⠀                       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣷⡄⠀⠀⠀⠈⢿⡄⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀███████╗ ██║ ██║ ╚████║ ╚██████╔╝ ██╔╝ ██╗⠀⠀⠀⠀⠀⠀⠀                           ⠀⠀⠀⠀⠀⠙⣿⡄⠀⠀⠀⠀⢻⡄
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀╚══════╝ ╚═╝ ╚═╝  ╚═══╝  ╚═════╝  ╚═╝  ╚═╝⠀⠀⠀⠀⠀⠀⠀⠀                          ⠀⠀⠀⠀⠀⠀⠘⣿⡀⠀⠀⠀⠀⢣
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀    ⠀⠀⠀⠀⠀⠀⠹⣇⠀⠀⠀⠀⠘
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀    ⠀⠀⠀⠀⠀⠀⠀⢻⡄⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀    ⠀⠀⠀⠀⠀⠀⠀⠈⣇⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠀⠀⠀⠀⠀ ⠀⠀⠀⠀⠀⠀⠀    ⠀⠀⠀⠀⠀⠀⠀⠀⢹⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⠀⠀⠀⠀⠀    ⠀⠀⠀⠀⠀⠀⠀⠀⠘ 
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀    ⠀⠀⠀⠀⠀⠀⠹⣇⠀⠀⠀⠀⠘
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀    ⠀⠀⠀⠀⠀⠀⠀⢻⡄⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀    ⠀⠀⠀⠀⠀⠀⠀⠈⣇⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠀⠀⠀⠀⠀ ⠀⠀⠀⠀⠀⠀⠀    ⠀⠀⠀⠀⠀⠀⠀⠀⢹⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⠀⠀⠀⠀⠀    ⠀⠀⠀⠀⠀⠀⠀⠀⠘ 
 
 EOF
 
@@ -142,75 +137,137 @@ build_banner_text() {
   elif command -v figlet >/dev/null 2>&1; then
     figlet -f slant "$text" 2>/dev/null || figlet "$text" 2>/dev/null
   else
-    echo "$FALLBACK"
+    echo "$FALLBACK" # Ab Fallback Banner use hoga
   fi
 }
 
-flicker_print() {
-  local txt="$1"; local times=${2:-2}
-  for ((r=0;r<times;r++)); do
-    printf "%b" "$(fg 236)${txt}${RESET}\r"
-    sleep 0.04
-    printf "%b" "$(fg 250)${txt}${RESET}\r"
-    sleep 0.04
-  done
-  printf "%b\n" "$txt"
+# --- USERNAME MANAGEMENT ---
+get_username() {
+    if [ -f "$CONFIG_FILE" ] && [ -s "$CONFIG_FILE" ]; then
+        read -r SAVED_NAME < "$CONFIG_FILE"
+        OWNER_NAME="$SAVED_NAME"
+        printf "%b" "$(fg 46)Welcome back, ${BOLD}$OWNER_NAME!${RESET}\n"
+    else
+        printf "\n%b" "$(fg 220)${BOLD}👋 Hello! Please enter the name you want to see on your banner/prompt:${RESET} "
+        read -r NEW_NAME
+        
+        if [ -n "$NEW_NAME" ]; then
+            echo "$NEW_NAME" > "$CONFIG_FILE"
+            OWNER_NAME="$NEW_NAME"
+            printf "\n%b\n" "$(fg 82)${BOLD}✅ Name saved as '$OWNER_NAME'!${RESET} Please type 'exit' now and open Termux again to see the changes applied permanently.${RESET}"
+            exit 0
+        else
+            printf "\n%b\n" "$(fg 196)⚠️ Name not set. Using default username ($OWNER_NAME).$RESET"
+        fi
+    fi
 }
 
-matrix_intro() {
-  # Optional matrix intro animation code
-  return
+# --- MENU FUNCTIONS (Options ke liye) ---
+
+install_packages() {
+    local PKGS=(git curl wget python nodejs figlet toilet nano)
+    printf "\n%b" "${BOLD}${UNDER}1. Installing All Packages...${RESET}\n"
+    for pkg in "${PKGS[@]}"; do
+        if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+            printf "%b\n" "-> Installing $pkg ..."
+            pkg install -y "$pkg"
+        else
+            printf "%b\n" "-> $pkg already installed."
+        fi
+    done
+    printf "%b\n" "${DIM}Package installation complete!${RESET}\n"
+    read -r -p "Press ENTER to return to the menu..."
 }
 
-pulse_border() {
-  # Optional pulse border animation code
-  return
+edit_shell_config() {
+    printf "\n%b" "${BOLD}${UNDER}2. Editing Shell Config (.bashrc)...${RESET}\n"
+    if command -v nano >/dev/null 2>&1; then
+        nano ~/.bashrc
+    else
+        printf "%b\n" "$(fg 196)⚠️ Nano not found. Please install it first using option 1 or 'pkg install nano'.${RESET}"
+        read -r -p "Press ENTER to return to the menu..."
+    fi
 }
 
-boot_messages() {
-  # Optional boot messages code
-  return
+edit_banner_script() {
+    printf "\n%b" "${BOLD}${UNDER}3. Customizing Banner Script...${RESET}\n"
+    if command -v nano >/dev/null 2>&1; then
+        nano "$0" 
+    else
+        printf "%b\n" "$(fg 196)⚠️ Nano not found. Please install it first using option 1 or 'pkg install nano'.${RESET}"
+        read -r -p "Press ENTER to return to the menu..."
+    fi
 }
 
-draw_shadow() {
-  # Optional shadow drawing code
-  return
+# --- MAIN MENU FUNCTION ---
+main_menu() {
+    local CHOICE
+    while true; do
+        clear
+        printf "\n%b\n" "${BOLD}=========================================${RESET}"
+        printf "%b\n" "$(fg 46)Welcome, ${OWNER_NAME}! Choose an option:${RESET}"
+        printf "%b\n" "${BOLD}=========================================${RESET}"
+        printf "%b\n" " ${BOLD}1)${RESET} $(fg 82)Install All Packages${RESET} (Essential tools)"
+        printf "%b\n" " ${BOLD}2)${RESET} $(fg 118)Edit Shell Config (.bashrc)${RESET} (Permanent startup ke liye)"
+        printf "%b\n" " ${BOLD}3)${RESET} $(fg 220)Customize Banner Script${RESET} (Variables edit karein)"
+        printf "%b\n" " ${BOLD}E)${RESET} $(fg 196)Exit Menu and Start Fancy Shell${RESET}"
+        printf "%b\n" "${BOLD}=========================================${RESET}"
+        printf "%b" "${BOLD}Enter choice (1-3 or E): ${RESET}"
+        read -r CHOICE
+
+        case "$CHOICE" in
+            1) install_packages ;;
+            2) edit_shell_config ;;
+            3) edit_banner_script ;;
+            [eE]) 
+                clear
+                printf "%b\n" "${DIM}Starting your personalized shell...${RESET}"
+                return 0
+                ;;
+            *) printf "\n%b\n" "$(fg 196)Invalid choice! Please try again.${RESET}"; sleep 1 ;;
+        esac
+    done
 }
 
-
-# === FANCY TERMINAL PROMPT FUNCTION ===
-fancy_prompt() {
-  # Yeh prompt sirf dikhane ke liye hai. Commands asli mein run nahi honge.
-  # Agar aap exit likhenge, toh yeh prompt band ho jayega.
-  local username="u0_a326"
+# --- INTERACTIVE FANCY PROMPT FUNCTION (Final Shell) ---
+interactive_prompt() {
+  local username="$OWNER_NAME"
   local host="termux"
-  local colors_user=(196 202 208 214)     # Red to Yellow gradient
-  local colors_host=(46 82 118 154)      # Green to Cyan gradient
-  local arrow_colors=(196 202 208 46)   # Arrows rainbow
+  local arrow_colors=(196 202 208 46) # Arrows rainbow
   local idx=0
-  local typing_speed=0.005 # Typing speed thodi fast ki
+  local typing_speed=0.005 
+
+  # Time-Based Colors ke liye
+  local colors_morning=(220 184 214) 
+  local colors_afternoon=(46 51 81)  
+  local colors_night=(27 21 160)     
+  local hour=$(date +%H)
+  local main_scheme=("${colors_afternoon[@]}") 
+
+  if [ "$hour" -ge 06 ] && [ "$hour" -lt 12 ]; then
+    main_scheme=("${colors_morning[@]}") 
+  elif [ "$hour" -ge 18 ] || [ "$hour" -lt 06 ]; then
+    main_scheme=("${colors_night[@]}")   
+  fi
 
   printf "\n%b" "${BOLD}Fancy Prompt shuru ho raha hai (rukne ke liye 'exit' likhein)...${RESET}\n"
 
   while true; do
-    # Prompt ke rangon ko banayein
-    local user_col=${colors_user[$((idx % ${#colors_user[@]}))]}
-    local host_col=${colors_host[$((idx % ${#colors_host[@]}))]}
+    local user_col=${main_scheme[$((idx % ${#main_scheme[@]}))]}
+    local host_col=${main_scheme[$(( (idx + 1) % ${#main_scheme[@]} ))]}
     local arrow_col=${arrow_colors[$((idx % ${#arrow_colors[@]}))]}
-    local dim_arrow_col=240 # Greyish color for separation
+    local dim_arrow_col=240
+    local cwd=$(pwd | sed "s|^$HOME|~|")
 
     # --- PROMPT DISPLAY ---
-    printf "%b" "$(fg 196)╭─["
+    printf "%b" "$(fg $arrow_col)╭─["
     printf "%b" "$(fg $user_col)$username"
-    printf "%b" "$(fg $dim_arrow_col)@$RESET" # @ sign ko dim kiya
+    printf "%b" "$(fg $dim_arrow_col)@$RESET"
     printf "%b" "$(fg $host_col)$host"
-    printf "%b" "$(fg 196)]"
-    printf "%b" "~"
-    printf "%b" "\n" # Prompt ko next line mein shuru kiya
-    # Arrows ko zyada stylized kiya
-    printf "%b" "$(fg $arrow_col)╰𓏵𓍯𓂃𓏵─▶ ${RESET}" 
+    printf "%b" "$(fg $arrow_col) ($cwd)]" # Directory display
+    printf "%b" "\n"
+    printf "%b" "$(fg $arrow_col)╰─▶ ${RESET}" 
 
-    # User ka input padhein
     IFS= read -r input
 
     if [ "$input" = "exit" ]; then
@@ -218,128 +275,98 @@ fancy_prompt() {
         break
     fi
 
-    # Animated typing ka dikhawa
-    # Cursor ko wapas prompt line ki shuruat mein le jao
+    # Animated typing simulation
     printf "\r"
-    # Prompt ko dobara print karein (ab tak ka input wahan hai)
-    printf "%b" "$(fg 196)╭─["
-    printf "%b" "$(fg $user_col)$username"
-    printf "%b" "$(fg $dim_arrow_col)@$RESET"
-    printf "%b" "$(fg $host_col)$host"
-    printf "%b" "$(fg 196)]"
-    printf "%b" "~"
-    printf "%b" "\n"
     printf "%b" "$(fg $arrow_col)╰─▶ ${RESET}"
-    
-    # Input ko animatedly print karein
     for ((i=0;i<${#input};i++)); do
       ch="${input:i:1}"
       color=${arrow_colors[$(( (idx+i) % ${#arrow_colors[@]} ))]}
       printf "%b" "$(fg $color)$ch${RESET}"
       sleep $typing_speed
     done
+    printf "%b" "$(fg 226)${BOLD}█${RESET}" # Final cursor
     
-    # Blinking Cursor Effect
-    printf "%b" "$(fg 226)${BOLD}█${RESET}\r" # Cursor dikhaya
-    sleep 0.1
-    printf " \r" # Cursor chhupaya
-    sleep 0.1
-    printf "%b" "$(fg 226)${BOLD}█${RESET}" # Cursor dobara dikhaya
-    
-    # Command execution ka simulated output (sirf dikhawa)
+    # Command execution simulated output
     printf "\n"
     if [ ! -z "$input" ]; then
-        printf "%b" "$(fg 245)${DIM}┌─${RESET}$(fg 250)${BOLD}Output for:${RESET} $(fg 82)${input}${RESET}\n" # Output styling
+        printf "%b" "$(fg 245)${DIM}┌─${RESET}$(fg 250)${BOLD}Output for:${RESET} $(fg 82)${input}${RESET}\n"
         printf "%b" "$(fg 245)└─${RESET}$(fg 240)Command executed successfully (simulation).${RESET}\n"
     fi
 
     idx=$((idx+1))
   done
 }
-# === MAIN FLOW ===
+
+# ==========================================================
+# === MAIN SCRIPT EXECUTION ===
+# ==========================================================
 clear
-progress_bar
-matrix_intro
-pulse_border
-printf "%b" "${DIM}${BOLD}Initializing...${RESET}\n"
-sleep 0.12
-boot_messages
+get_username # Step 1: Naam set ya load hoga
 
-BANNER="$(build_banner_text LINUX)"
-IFS=$'\n' read -rd '' -a LINES <<<"$BANNER" || true
+# Sirf tabhi aage badho jab naam save ho chuka ho (i.e. first run ke baad)
+if [ -f "$CONFIG_FILE" ]; then
+    progress_bar
 
-cols=$(get_cols)
-box_width=0
-for l in "${LINES[@]}"; do [ ${#l} -gt $box_width ] && box_width=${#l}; done
-box_pad=6
-total_width=$((box_width + box_pad))
-left_pad=0
-[ "$CENTER_TEXT" -eq 1 ] && left_pad=$(( (cols - total_width) / 2 ))
-[ $left_pad -lt 0 ] && left_pad=0
+    printf "%b" "${DIM}${BOLD}Initializing...${RESET}\n"
+    sleep 0.12
 
-# top border
-printf "%b" "$(printf '%*s' $left_pad '')"
-printf "%b" "$(fg 39)╔"
-for ((i=0;i<total_width-2;i++)); do printf "═"; done
-printf "╗${RESET}\n"
+    # --- BANNER DRAWING ---
+    # Figlet/Toilet available nahi hone par ab FALLBACK (Original Banner) use hoga.
+    BANNER="$(build_banner_text LINUX)"
+    IFS=$'\n' read -rd '' -a LINES <<<"$BANNER" || true
 
-# banner lines
-for i in "${!LINES[@]}"; do
-  line="${LINES[$i]}"
-  padding_left=$(( (total_width - ${#line}) / 2 - 1 ))
-  padding_right=$(( total_width - ${#line} - padding_left - 2 ))
-  printf "%b" "$(printf '%*s' $left_pad '')"
-  printf "%b" "$(fg 240)║${RESET} "
-  type_line_colored "$(printf '%*s' $padding_left '')${line}$(printf '%*s' $padding_right '')" $((i*2))
-  printf "%b" "$(printf '%*s' $left_pad '')"
-  printf "%b" "$(fg 240)║${RESET}\n"
-done
+    cols=$(get_cols)
+    box_width=0
+    for l in "${LINES[@]}"; do [ ${#l} -gt $box_width ] && box_width=${#l}; done
+    box_pad=6
+    total_width=$((box_width + box_pad))
+    left_pad=0
+    [ "$CENTER_TEXT" -eq 1 ] && left_pad=$(( (cols - total_width) / 2 ))
+    [ $left_pad -lt 0 ] && left_pad=0
 
-# bottom border
-printf "%b" "$(printf '%*s' $left_pad '')"
-printf "%b" "$(fg 226)╚"
-for ((i=0;i<total_width-2;i++)); do printf "═"; done
-printf "╝${RESET}\n"
-sleep $BANNER_DELAY
+    # Draw border and banner
+    printf "%b" "$(printf '%*s' $left_pad '')"; printf "%b" "$(fg 39)╔"; for ((i=0;i<total_width-2;i++)); do printf "═"; done; printf "╗${RESET}\n"
+    for i in "${!LINES[@]}"; do
+      line="${LINES[$i]}"
+      padding_left=$(( (total_width - ${#line}) / 2 - 1 ))
+      padding_right=$(( total_width - ${#line} - padding_left - 2 ))
+      printf "%b" "$(printf '%*s' $left_pad '')"; printf "%b" "$(fg 240)║${RESET} "
+      # Agar FALLBACK ASCII art hai toh type_line_colored use mat karo, seedha print karo
+      if [ "$BANNER" = "$FALLBACK" ]; then
+          printf "%b\n" "$line"
+      else
+          type_line_colored "$(printf '%*s' $padding_left '')${line}$(printf '%*s' $padding_right '')" $((i*2))
+      fi
+      printf "%b" "$(printf '%*s' $left_pad '')"; printf "%b" "$(fg 240)║${RESET}\n"
+    done
+    printf "%b" "$(printf '%*s' $left_pad '')"; printf "%b" "$(fg 226)╚"; for ((i=0;i<total_width-2;i++)); do printf "═"; done; printf "╝${RESET}\n"
+    sleep $BANNER_DELAY
 
-# Footer with Owner/GitHub/WhatsApp
-footer_lines=(
-  "$(fg 82)⟡${RESET} ${BOLD}Host:${RESET} Termux on Android"
-  "$(fg 118)☺${RESET} ${BOLD}User:${RESET} $(whoami 2>/dev/null || echo 'termux')"
-  "$(fg 154)⚙${RESET} ${BOLD}Mode:${RESET} $(uname -o 2>/dev/null || echo 'Android')"
-  "$(fg 39)★${RESET} ${BOLD}Owner:${RESET} $OWNER_NAME"
-  "$(fg 202)🐱${RESET} ${BOLD}GitHub:${RESET} $GITHUB_LINK"
-  "$(fg 46)💬${RESET} ${BOLD}WhatsApp Channel:${RESET} $WHATSAPP_CHANNEL"
-  "${DIM}This is a decorative banner — use responsibly.${RESET}"
-)
-for f in "${footer_lines[@]}"; do center_line "$f"; done
+    # Footer
+    footer_lines=(
+      "$(fg 82)⟡${RESET} ${BOLD}Host:${RESET} Termux on Android"
+      "$(fg 154)⚙${RESET} ${BOLD}Mode:${RESET} $(uname -o 2>/dev/null || echo 'Android')"
+      "$(fg 39)★${RESET} ${BOLD}Owner:${RESET} $OWNER_NAME"
+      "$(fg 202)🐱${RESET} ${BOLD}GitHub:${RESET} $GITHUB_LINK"
+      "$(fg 46)💬${RESET} ${BOLD}WhatsApp Channel:${RESET} $WHATSAPP_CHANNEL"
+      "${DIM}This is a decorative banner — use responsibly.${RESET}"
+    )
+    for f in "${footer_lines[@]}"; do center_line "$f"; done
+    printf "\n"
 
-# ==============================
-# AUTOMATIC TERMUX PACKAGE INSTALLER
-PKGS=(git curl wget python nodejs figlet toilet)
-printf "\n%b" "${BOLD}Checking & installing selected Termux packages (if missing)...${RESET}"
-for pkg in "${PKGS[@]}"; do
-  if ! dpkg -s "$pkg" >/dev/null 2>&1; then
-    printf "%b\n" "-> Installing $pkg ..."
-    pkg install -y "$pkg"
-  else
-    printf "%b\n" "-> $pkg already installed."
-  fi
-done
-printf "%b\n" "${DIM}Package check complete.${RESET}"
-# ==============================
-
-# WhatsApp auto-launch (Android Termux)
-if command -v am >/dev/null 2>&1; then
-  printf "\n%b" "${BOLD}${UNDER}Opening WhatsApp channel...${RESET}\n"
-  am start -a android.intent.action.VIEW -d "$WHATSAPP_CHANNEL" 2>/dev/null || true
-  printf "%b\n" "If WhatsApp didn't open automatically, please join manually: $WHATSAPP_CHANNEL"
+    # --- SHOW MAIN MENU ---
+    main_menu
+    
+    # --- AFTER MENU EXIT ---
+    if command -v am >/dev/null 2>&1 && [ -n "$WHATSAPP_CHANNEL" ]; then
+      printf "\n%b" "${BOLD}${UNDER}Opening WhatsApp channel...${RESET}\n"
+      am start -a android.intent.action.VIEW -d "$WHATSAPP_CHANNEL" 2>/dev/null || true
+    fi
+    
+    # Start the fancy prompt
+    interactive_prompt
 fi
 
-printf "\n"
-# Fancy prompt ko yahan call kiya gaya hai
-fancy_prompt
-
-# Jab fancy_prompt se 'exit' type karke bahar aayenge, tab yeh command run hoga.
+# The final 'clear' at the end of the full script will still run.
 clear
 # Script khatam
