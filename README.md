@@ -64,5 +64,5 @@ chmod +x linux_banner_enhanced.sh
 ---
 
 ```
-./linux_banner_enhanced.sh
+bash linux_banner_enhanced.sh
 ```
